@@ -1,105 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZULVO | Premium Fashion</title>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#000;
-color:white;
-}
-
-header{
-display:flex;
-justify-content:space-between;
-padding:20px;
-background:#111;
-}
-
-.logo{
-font-size:30px;
-font-weight:bold;
-color:#fff;
-letter-spacing:4px;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-margin-left:20px;
-}
-
-.hero{
-height:90vh;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-text-align:center;
-background:linear-gradient(black,#222);
-}
-
-.hero h1{
-font-size:60px;
-margin-bottom:15px;
-}
-
-.hero p{
-font-size:22px;
-color:#bbb;
-}
-
-.btn{
-margin-top:25px;
-padding:15px 35px;
-background:white;
-color:black;
-text-decoration:none;
-font-weight:bold;
-border-radius:30px;
-}
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZULVO | Premium Fashion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">ZULVO</div>
 
-<header>
+      <nav class="nav" aria-label="Primary">
+        <a href="#hero">Home</a>
+        <a href="#men">Men</a>
+        <a href="#women">Women</a>
+        <a href="#new">New</a>
+        <a href="#best">Best Sellers</a>
+      </nav>
 
-<div class="logo">
-ZULVO
-</div>
+      <div class="header-actions">
+        <div class="search">
+          <input type="search" id="searchInput" placeholder="Search premium pieces">
+          <button id="searchBtn" aria-label="Search">🔍</button>
+        </div>
 
-<nav>
-<a href="#">Home</a>
-<a href="#">Men</a>
-<a href="#">Women</a>
-<a href="#">Crypto</a>
-<a href="#">Contact</a>
-</nav>
+        <button id="cartBtn" class="icon-btn" aria-label="Open cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="10" cy="20" r="1" fill="currentColor"/>
+            <circle cx="18" cy="20" r="1" fill="currentColor"/>
+          </svg>
+          <span id="cartCount" class="cart-count">0</span>
+        </button>
 
-</header>
+        <button class="icon-btn" aria-label="User account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
 
-<section class="hero">
+  <main>
+    <section id="hero" class="hero" aria-label="Hero banner">
+      <div class="hero-inner">
+        <h1 class="brand-title">Wear Confidence</h1>
+        <p class="tagline">Elevated Streetwear & Timeless Luxury</p>
+        <a href="#featured" class="btn-primary">Shop the Edit</a>
+      </div>
+    </section>
 
-<h1>Wear Confidence.</h1>
+    <section id="featured" class="section featured">
+      <div class="container">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="grid product-grid" id="featuredGrid">
+          <!-- 6 product cards -->
+          <article class="product-card" data-id="p1" data-name="Apex Jacket" data-price="249">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>Apex Jacket</h3>
+              <p class="price">$249</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
 
-<p>Premium Streetwear & Luxury Fashion</p>
+          <article class="product-card" data-id="p2" data-name="Luxe Tee" data-price="69">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>Luxe Tee</h3>
+              <p class="price">$69</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
 
-<a class="btn" href="#">
-SHOP NOW
-</a>
+          <article class="product-card" data-id="p3" data-name="Signature Sneakers" data-price="199">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>Signature Sneakers</h3>
+              <p class="price">$199</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
 
-</section>
+          <article class="product-card" data-id="p4" data-name="Tailored Coat" data-price="349">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>Tailored Coat</h3>
+              <p class="price">$349</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
 
+          <article class="product-card" data-id="p5" data-name="Minimalist Bag" data-price="159">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>Minimalist Bag</h3>
+              <p class="price">$159</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="p6" data-name="Silk Scarf" data-price="89">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>Silk Scarf</h3>
+              <p class="price">$89</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="men" class="section collection">
+      <div class="container">
+        <h2 class="section-title">Men's Collection</h2>
+        <p class="section-sub">Modern silhouettes crafted for everyday luxury.</p>
+        <div class="collection-grid">
+          <div class="collection-item placeholder"></div>
+          <div class="collection-item placeholder"></div>
+          <div class="collection-item placeholder"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="women" class="section collection alt">
+      <div class="container">
+        <h2 class="section-title">Women's Collection</h2>
+        <p class="section-sub">Refined pieces with bold attitude.</p>
+        <div class="collection-grid">
+          <div class="collection-item placeholder"></div>
+          <div class="collection-item placeholder"></div>
+          <div class="collection-item placeholder"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="new" class="section">
+      <div class="container">
+        <h2 class="section-title">New Arrivals</h2>
+        <div class="grid product-grid small-grid">
+          <!-- small set - reuse placeholders -->
+          <article class="product-card" data-id="n1" data-name="New Jacket" data-price="229">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>New Jacket</h3>
+              <p class="price">$229</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="n2" data-name="New Sneaker" data-price="189">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>New Sneaker</h3>
+              <p class="price">$189</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="n3" data-name="New Shirt" data-price="79">
+            <div class="product-media placeholder"></div>
+            <div class="product-info">
+              <h3>New Shirt</h3>
+              <p class="price">$79</p>
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="best" class="section">
+      <div class="container">
+        <h2 class="section-title">Best Sellers</h2>
+        <div class="product-list horizontal-scroll">
+          <article class="product-mini placeholder">
+            <h4>Best Jacket</h4>
+            <p>$279</p>
+          </article>
+          <article class="product-mini placeholder">
+            <h4>Best Sneaker</h4>
+            <p>$199</p>
+          </article>
+          <article class="product-mini placeholder">
+            <h4>Best Coat</h4>
+            <p>$329</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter section">
+      <div class="container">
+        <h2 class="section-title">Join the List</h2>
+        <p class="section-sub">Sign up for early access to drops and exclusive offers.</p>
+        <form id="newsletterForm" class="newsletter-form">
+          <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+          <button type="submit" class="btn-outline">Subscribe</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button id="closeCart" class="icon-btn" aria-label="Close cart">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items">
+      <!-- cart items inserted by JS -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">Total: $<span id="cartTotal">0</span></div>
+      <button id="checkoutBtn" class="btn-primary">Checkout</button>
+    </div>
+  </aside>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo">ZULVO</div>
+        <p class="muted">Premium fashion curated for the modern wardrobe.</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="https://wa.me/1234567890" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="mailto:hello@zulvo.com">Email</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-copyright">
+        <p>© <span id="year"></span> ZULVO. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
