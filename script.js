@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   /* CURRENCY FUNCTIONS */
   async function detectCurrency() {
     try {
-      // Use ip-api.com for geolocation (free tier available)
+      // Use ipapi.co for geolocation (free tier available)
       const response = await fetch('https://ipapi.co/json/');
       if (!response.ok) throw new Error('Geolocation failed');
       
@@ -127,7 +127,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (currency.isUSD) {
       return `$${convertedPrice.toFixed(2)}`;
     } else {
-      return `PKR ${Math.round(convertedPrice).toLocaleString()}`;
+      // PKR format: PKR 7,999
+      return `PKR ${Math.round(convertedPrice).toLocaleString('en-US')}`;
     }
   }
 
@@ -144,8 +145,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Update best sellers
     document.querySelectorAll('.product-mini').forEach(item => {
       const priceText = item.querySelector('p');
-      if (priceText && priceText.textContent.includes('$')) {
-        const match = priceText.textContent.match(/\$(\d+)/);
+      if (priceText) {
+        // Extract price from text (handles both $X and old format)
+        const match = priceText.textContent.match(/\$?(\d+)/);
         if (match) {
           const priceUSD = Number(match[1]);
           priceText.textContent = formatPrice(priceUSD);
@@ -219,10 +221,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       const formattedPrice = formatPrice(item.priceUSD);
       row.innerHTML = `
         <div class="meta">
-          <div style="width:56px;height:56px;border-radius:6px;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(0,0,0,0.08));display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:var(--muted);font-weight:700">#</div>
+          <div style="width:56px;height:56px;border-radius:6px;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(0,0,0,0.08));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted)">✓</div>
           <div>
             <div style="font-weight:700">${item.name}</div>
-            <div style="color:${getComputedStyle(document.documentElement).getPropertyValue('--muted') || 'gray'};font-size:0.9rem">${formattedPrice}</div>
+            <div style="color:var(--muted);font-size:0.9rem">${formattedPrice}</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
@@ -248,10 +250,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
+    // Update cart total with proper formatting
     const total = cart.reduce((s, i) => s + (i.priceUSD * i.qty), 0);
-    const formattedTotal = formatPrice(total);
     if (cartTotalEl) {
-      cartTotalEl.textContent = currency.isUSD ? total.toFixed(2) : Math.round(total * currency.rate).toLocaleString();
+      if (currency.isUSD) {
+        cartTotalEl.textContent = total.toFixed(2);
+      } else {
+        const convertedTotal = Math.round(total * currency.rate);
+        cartTotalEl.textContent = convertedTotal.toLocaleString('en-US');
+      }
     }
   }
 
