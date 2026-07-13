@@ -1,5 +1,5 @@
-// ZULVO - cart + UI behavior
-document.addEventListener('DOMContentLoaded', () => {
+// ZULVO - cart + UI behavior + currency detection
+document.addEventListener('DOMContentLoaded', async () => {
   const CART_KEY = 'zulvo_cart_v1';
   const cartBtn = document.getElementById('cartBtn');
   const cartDrawer = document.getElementById('cartDrawer');
@@ -17,8 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
   yearEl && (yearEl.textContent = new Date().getFullYear());
 
   let cart = loadCart();
+  let currency = { code: 'USD', symbol: '$', rate: 1, isUSD: true };
+
+  // Detect user country and set currency
+  await detectCurrency();
 
   updateCartUI();
+  updateProductPrices();
 
   // Add to Cart handlers
   addButtons.forEach(btn => {
@@ -27,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!card) return;
       const id = card.dataset.id;
       const name = card.dataset.name || card.querySelector('h3')?.textContent || 'Product';
-      const price = Number(card.dataset.price || 0);
-      addToCart({ id, name, price, qty: 1 });
+      const priceUSD = Number(card.dataset.price || 0);
+      addToCart({ id, name, priceUSD, qty: 1 });
       // brief feedback
       btn.textContent = 'Added';
       btn.disabled = true;
@@ -83,6 +88,69 @@ document.addEventListener('DOMContentLoaded', () => {
     cards.forEach(c => {
       const text = (c.dataset.name || c.querySelector('h3')?.textContent || '').toLowerCase();
       c.style.display = text.includes(q) ? '' : 'none';
+    });
+  }
+
+  /* CURRENCY FUNCTIONS */
+  async function detectCurrency() {
+    try {
+      // Use ip-api.com for geolocation (free tier available)
+      const response = await fetch('https://ipapi.co/json/');
+      if (!response.ok) throw new Error('Geolocation failed');
+      
+      const data = await response.json();
+      const country = data.country_code;
+
+      if (country === 'PK') {
+        currency = {
+          code: 'PKR',
+          symbol: 'PKR',
+          rate: 280, // Approximate USD to PKR rate
+          isUSD: false
+        };
+      } else {
+        currency = {
+          code: 'USD',
+          symbol: '$',
+          rate: 1,
+          isUSD: true
+        };
+      }
+    } catch (err) {
+      console.warn('Could not detect location, defaulting to USD', err);
+      currency = { code: 'USD', symbol: '$', rate: 1, isUSD: true };
+    }
+  }
+
+  function formatPrice(priceUSD) {
+    const convertedPrice = priceUSD * currency.rate;
+    if (currency.isUSD) {
+      return `$${convertedPrice.toFixed(2)}`;
+    } else {
+      return `PKR ${Math.round(convertedPrice).toLocaleString()}`;
+    }
+  }
+
+  function updateProductPrices() {
+    // Update featured products
+    document.querySelectorAll('.product-card').forEach(card => {
+      const priceUSD = Number(card.dataset.price || 0);
+      const priceEl = card.querySelector('.price');
+      if (priceEl) {
+        priceEl.textContent = formatPrice(priceUSD);
+      }
+    });
+
+    // Update best sellers
+    document.querySelectorAll('.product-mini').forEach(item => {
+      const priceText = item.querySelector('p');
+      if (priceText && priceText.textContent.includes('$')) {
+        const match = priceText.textContent.match(/\$(\d+)/);
+        if (match) {
+          const priceUSD = Number(match[1]);
+          priceText.textContent = formatPrice(priceUSD);
+        }
+      }
     });
   }
 
@@ -148,12 +216,13 @@ document.addEventListener('DOMContentLoaded', () => {
     cart.forEach(item => {
       const row = document.createElement('div');
       row.className = 'cart-item';
+      const formattedPrice = formatPrice(item.priceUSD);
       row.innerHTML = `
         <div class="meta">
-          <div style="width:56px;height:56px;border-radius:6px;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(0,0,0,0.08));display:flex;align-items:center;justify-content:center;font-weight:700">${(item.name||'P').split(' ')[0]}</div>
+          <div style="width:56px;height:56px;border-radius:6px;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(0,0,0,0.08));display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:var(--muted);font-weight:700">#</div>
           <div>
             <div style="font-weight:700">${item.name}</div>
-            <div style="color:${getComputedStyle(document.documentElement).getPropertyValue('--muted') || 'gray'};font-size:0.9rem">$${(item.price).toFixed(2)}</div>
+            <div style="color:${getComputedStyle(document.documentElement).getPropertyValue('--muted') || 'gray'};font-size:0.9rem">${formattedPrice}</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
@@ -179,8 +248,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-    cartTotalEl && (cartTotalEl.textContent = total.toFixed(2));
+    const total = cart.reduce((s, i) => s + (i.priceUSD * i.qty), 0);
+    const formattedTotal = formatPrice(total);
+    if (cartTotalEl) {
+      cartTotalEl.textContent = currency.isUSD ? total.toFixed(2) : Math.round(total * currency.rate).toLocaleString();
+    }
   }
 
   function toggleCart(open) {
