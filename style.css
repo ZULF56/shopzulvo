@@ -156,6 +156,12 @@ body{
 /* Section layout */
 .section{
   padding:64px 20px;
+  display:block;
+  width:100%;
+}
+.featured{
+  background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+  border-top:1px solid rgba(255,255,255,0.03);
 }
 .container{
   max-width:var(--max-width);
